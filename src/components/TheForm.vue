@@ -1,8 +1,14 @@
 <template>
   <form @submit.prevent="submitForm()">
-    <div class="form-control">
+      <!-- validation check -->
+      <!-- add class for UI/UX style-->
+    <div class="form-control" :class="{invalidStyle : inputValidity === 'invalid'}">
       <label for="user-name">Your Name</label>
-      <input id="user-name" name="user-name" type="text" v-model="userName"/>
+      <!-- @blur -->
+      <input id="user-name" name="user-name" type="text" v-model.trim="userName" @blur="validityInput"/>
+      <!-- add warning  -->
+      <!-- add condition -->
+      <p v-if="inputValidity === 'invalid'">Please check your user name!</p>
     </div>
     <div class="form-control">
       <label for="age">Your Age (Years)</label>
@@ -67,6 +73,7 @@
         interest:[], //checkbox = multiple selection & needs different values to select each
         how:"", //radio btn = select only one
         agree: false,
+        inputValidity: "pending"  // data checking validity
       }
     },
     methods : {
@@ -81,7 +88,16 @@
         console.log(this.agree);
         // only 1 checkbox = true/false
         this.agree = false;
-      }
+      },
+      // build validityInput function
+      validityInput(){
+        if(this.userName === ''){
+          this.inputValidity = "invalid"
+          console.log(`inputValidity : ${this.inputValidity}`);
+        }else{
+          this.inputValidity = "valid"
+        }
+      },
     }
   }
 
@@ -134,6 +150,10 @@ input[type='radio'] + label {
   font-weight: normal;
 }
 
+.invalidStyle input{
+  border: 1px solid red
+}
+
 button {
   font: inherit;
   border: 1px solid #0076bb;
@@ -150,3 +170,4 @@ button:active {
   background-color: #002350;
 }
 </style>
+
